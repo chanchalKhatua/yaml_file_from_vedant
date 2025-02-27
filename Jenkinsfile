@@ -8,14 +8,14 @@ pipeline {
     stages {
         stage('Checkout Source') {
             steps {
-                git branch: 'main', url: 'https://github.com/scaler-bhavya/jenkins-k8s-docker.git'
+                git branch: 'e2e_project', url: 'https://github.com/vedantsharmascaler/testing_repo.git'
             }
         }
 
         stage('Build Image') {
             steps {
                 script {
-                    sh 'docker build -t bhavyascaler/react-app:latest .'
+                    sh 'docker build -t vedant120/react-app:latest .'
                 }
             }
         }
@@ -31,27 +31,15 @@ pipeline {
 
         stage('Push') {
             steps {
-                sh 'docker push bhavyascaler/react-app:latest'
+                sh 'docker push vedant120/react-app:latest'
             }
         }
 
-        stage("Deploy to EKS") {
+        stage('Deploy to EKS') {
             steps {
-                script {
-                    withCredentials([
-                        [$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-credentials', 
-                         accessKeyVariable: 'AWS_ACCESS_KEY_ID', 
-                         secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'],
-        
-                    ]) {
-                        sh """
-                          echo "Updating kubeconfig..."
-                          aws eks update-kubeconfig --name amcdemo --region ${AWS_DEFAULT_REGION}
-                          kubectl apply -f deployment.yaml
-                          kubectl apply -f service.yaml
-                        """
-                    }
-                }
+                sh 'kubectl config use-context my-eks-cluster'
+                sh 'kubectl apply -f deployment.yaml'
+                sh 'kubectl apply -f service.yaml'
             }
         }
     }
