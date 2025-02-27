@@ -27,7 +27,6 @@ pipeline {
             }
         }
 
-
         stage('Push') {
             steps {
                 sh 'docker push vedant120/react-app:latest'
@@ -36,7 +35,7 @@ pipeline {
 
         stage('Deploy to EKS') {
             steps {
-                sh 'kubectl config use-context my-eks-cluster'
+                sh 'kubectl config use-context arn:aws:eks:us-east-1:266735832911:cluster/jenkinsProject'
                 sh 'kubectl apply -f deployment.yaml'
                 sh 'kubectl apply -f service.yaml'
             }
