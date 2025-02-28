@@ -15,7 +15,7 @@ pipeline {
         stage('Build Image') {
             steps {
                 script {
-                    sh 'sudo docker build -t vedant120/react-app:v2 .'
+                    sh 'sudo docker build -t vedant120/react-app:v3 .'
                 }
             }
         }
@@ -29,7 +29,7 @@ pipeline {
 
         stage('Push') {
             steps {
-                sh 'sudo docker push vedant120/react-app:v2'
+                sh 'sudo docker push vedant120/react-app:v3'
             }
         }
 
