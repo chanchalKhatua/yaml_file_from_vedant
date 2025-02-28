@@ -15,21 +15,21 @@ pipeline {
         stage('Build Image') {
             steps {
                 script {
-                    sh 'docker build -t vedant120/react-app:latest .'
+                    sh 'sudo docker build -t vedant120/react-app:v2 .'
                 }
             }
         }
         stage('Docker Login') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
-                    sh 'echo "$PASS" | docker login -u "$USER" --password-stdin'
+                    sh 'echo "$PASS" | sudo docker login -u "$USER" --password-stdin'
                 }
             }
         }
 
         stage('Push') {
             steps {
-                sh 'docker push vedant120/react-app:latest'
+                sh 'sudo docker push vedant120/react-app:v2'
             }
         }
 
